@@ -8,10 +8,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import ru.umarsh.shoeapp.enum.DashboardOptions
+import ru.umarsh.shoeapp.util.Screen
 
 @Composable
-fun DashboardComponent() {
+fun DashboardComponent(navController: NavController) {
     val context = LocalContext.current
     Column(modifier = Modifier) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -19,7 +21,7 @@ fun DashboardComponent() {
                 ProjectItem(it) {
                     when (it) {
                         DashboardOptions.SHOE_APP -> {
-                            Toast.makeText(context, "SHOE_APP", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.ShoeAppScreen.route)
                         }
                         else -> {
                             Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
@@ -28,6 +30,5 @@ fun DashboardComponent() {
                 }
             }
         }
-
     }
 }

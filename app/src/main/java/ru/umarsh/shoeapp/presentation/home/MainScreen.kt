@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ru.umarsh.shoeapp.R
 import ru.umarsh.shoeapp.enum.HomeMenu
 import ru.umarsh.shoeapp.enum.HomeMenuAction
@@ -35,7 +36,7 @@ import ru.umarsh.shoeapp.ui.theme.textColor
 import kotlin.math.roundToInt
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
@@ -260,7 +261,7 @@ fun MainScreen() {
             )
             when (screen) {
                 HomeMenu.HOME.name -> {
-                    DashboardComponent()
+                    DashboardComponent(navController)
                 }
                 HomeMenu.PROFILE.name -> {
                     ProfileComponent()
