@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ru.umarsh.shoeapp.presentation.cart.CartScreen
 import ru.umarsh.shoeapp.presentation.home.MainScreen
 import ru.umarsh.shoeapp.presentation.shoe_app.MainViewModel
 import ru.umarsh.shoeapp.presentation.shoe_app.ShoeScreen
@@ -38,6 +39,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Screen.ShoeAppScreen.route) {
                             ShoeScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.CartScreen.route) {
+                            CartScreen(navController = navController)
                         }
                     }
                 }
