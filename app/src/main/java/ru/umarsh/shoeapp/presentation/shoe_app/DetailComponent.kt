@@ -6,11 +6,14 @@ import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -20,13 +23,17 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.umarsh.shoeapp.R
 import ru.umarsh.shoeapp.data.CarouselDataModel
+import ru.umarsh.shoeapp.enum.ButtonState
 import ru.umarsh.shoeapp.enum.DetailState
 import ru.umarsh.shoeapp.ui.theme.accentColor
+import ru.umarsh.shoeapp.ui.theme.textColor
 import ru.umarsh.shoeapp.util.Screen
 
 @Composable
@@ -171,11 +178,156 @@ fun DetailComponent(
                         .rotate(330f)
                         .size(size)
                 )
+                LazyRow(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp)
+                        .alpha(alpha)
+                ) {
+                    items(4) {
+                        Image(
+                            painter = painterResource(id = carouselDataModel.resId),
+                            contentDescription = "images",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .background(
+                                    color = Color.LightGray.copy(.2f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .width(80.dp)
+                                .height(60.dp)
+                                .padding(8.dp)
+                        )
+                    }
+                }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(alpha)
+                        .height(1.dp)
+                        .background(Color.LightGray)
+                        .align(Alignment.BottomCenter)
 
-                //todo
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .offset(translateY.x.dp, translateY.y.dp)
+                    .alpha(alpha)
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = carouselDataModel.description,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textColor
+                    )
+                    Text(
+                        text = carouselDataModel.price,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textColor,
+                        modifier = Modifier
+                            .background(
+                                carouselDataModel.color.copy(alpha = .1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(4.dp)
+                    )
+                }
+                Text(
+                    text = carouselDataModel.aboutProduct,
+                    color = textColor.copy(alpha = .5f),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    fontSize = 16.sp,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "MORE DETAILS",
+                    color = textColor,
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    textDecoration = TextDecoration.Underline
+                )
 
-
-
+                Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+                    Text(
+                        text = "Size",
+                        color = textColor,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "UK",
+                        color = textColor,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "USA",
+                        color = textColor.copy(alpha = .5f),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
+                LazyRow {
+                    items(4) { _ ->
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .background(
+                                    color = Color.LightGray.copy(.2f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .width(60.dp)
+                                .height(50.dp)
+                                .padding(4.dp)
+                        ) {
+                            Text(
+                                text = "8",
+                                color = textColor,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(60.dp))
+            }
+        }
+        Button(
+            onClick = {
+                viewModel.changeButtonState()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .align(Alignment.BottomCenter)
+                .alpha(alpha),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = carouselDataModel.color)
+        ) {
+            if (buttonState == ButtonState.DEFAULT) {
+                Text(text = "ADD TO BAG", modifier = Modifier.padding(8.dp))
+            } else if (buttonState == ButtonState.LOADING) {
+                CircularProgressIndicator(
+                    color = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.size(30.dp)
+                )
+            } else {
+                Text(text = "✓ Go to cart", modifier = Modifier.padding(8.dp))
             }
         }
     }
